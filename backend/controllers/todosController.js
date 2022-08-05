@@ -26,9 +26,9 @@ async function getTodo(req, res) {
 
     if (!todo) {
         res.status(404).json({ error: 'Todo not found' });
+    } else {
+        res.status(200).json(todo);
     }
-
-    res.status(200).json(todo);
 }
 
 // Update
@@ -38,7 +38,11 @@ async function updateTodo(req, res) {
     
     try {
         const todo = await Todo.findByIdAndUpdate(id, { title, completed }, { new: true });
-        res.status(204).json(todo);
+        if (!todo) {
+            res.status(404).json({ error: 'Todo not found' });
+        } else {
+            res.status(200).json(todo);
+        }
     } catch (err) {
         res.status(400).json({error: err.message});
     }
@@ -48,9 +52,14 @@ async function updateTodo(req, res) {
 async function deleteTodo(req, res) {
     const { id } = req.params;
 
-    await Todo.findByIdAndDelete(id);
+    const todo = await Todo.findByIdAndDelete(id);
+    
+    if (!todo) {
+        res.status(404).json({ error: 'Todo not found' });
+    } else {
+        res.status(204).json({});
+    }
 
-    res.status(204).json({});
 }
 
 module.exports = {
