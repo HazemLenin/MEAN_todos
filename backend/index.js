@@ -16,12 +16,14 @@ app.use('*', (req, res) => {
     res.status(404).json({ error: 'Page not found' });
 });
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-    app.listen(process.env.PORT, () => console.log(`Server listening at port ${process.env.PORT}`));
-})
-.catch(err => {
-    console.error(err);
-});
+if (!process.env.NODE_ENV === 'test' || process.env.NODE_ENV === undefined) {
+    mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+            app.listen(process.env.PORT, () => console.log(`Server listening at port ${process.env.PORT}`));
+        })
+    .catch(err => {
+        console.error(err);
+    });
+}
 
 module.exports = app;
