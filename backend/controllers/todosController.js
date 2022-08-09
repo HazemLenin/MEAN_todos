@@ -2,7 +2,7 @@ const Todo = require('../models/Todo');
 
 // List
 async function getTodos (req, res) {
-    const todos = await Todo.find({}).sort({ createdAt: -1 });
+    const todos = await Todo.find({}).sort({ createdAt: 1 });
     res.status(200).json(todos);
 }
 
